@@ -1,0 +1,92 @@
+This version of rosjava (https://github.com/rosjava/rosjava_core) has been modified
+from its original source. This notices describes all changes and lists the 
+affected files.
+
+To support interoperability with the google-collections (https://code.google.com/p/google-collections) 
+and guava libraries (https://code.google.com/p/guava-libraries), the following source files 
+have been modified:
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/DefaultMessageInterfaceClassProvider.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/StringFileProvider.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/StringResourceProvider.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/context/MessageContextProvider.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/definition/MessageDefinitionFileProvider.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/definition/MessageDefinitionReflectionProvider.java
+   rosjava_core/rosjava/src/main/java/org/ros/concurrent/ListenerGroup.java
+   rosjava_core/rosjava/src/main/java/org/ros/concurrent/RetryingExecutorService.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/server/ParameterServer.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/server/master/MasterRegistrationManagerImpl.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/ServiceManager.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/topic/TopicParticipantManager.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/transport/ConnectionHeader.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/transport/ConnectionTrackingHandler.java
+   rosjava_core/rosjava_geometry/src/main/java/org/ros/rosjava_geometry/FrameTransformTree.java
+
+In addition, several modifications have been made to the ROS service implementation to enhance its flexibility.
+The following source files have been modified for these service changes:
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/ChannelBufferField.java
+   rosjava_core/rosjava/src/main/java/org/ros/concurrent/DefaultScheduledExecutorService.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/server/master/MasterServer.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/DefaultServiceClient.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/DefaultServiceServer.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/ServiceFactory.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/ServiceManager.java
+   rosjava_core/rosjava/src/main/java/org/ros/node/service/DefaultServiceClientListener.java (added)
+   rosjava_core/rosjava/src/main/java/org/ros/node/service/ServiceClient.java
+   rosjava_core/rosjava/src/main/java/org/ros/node/service/ServiceClientListener.java (added)
+
+Fixed a bug in the ParameterServer implementation that incorrectly labels some graph names as invalid:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/server/ParameterServer.java
+
+Enabled XML-RPC multicall requests:
+   rosjava_core/apache_xmlrpc_server/src/main/java/org/apache/xmlrpc/server/XmlRpcStreamServer.java
+
+Ensured that "null" inputs to array message field setter functions are correctly handled:
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/BooleanArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/ByteArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/DoubleArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/FloatArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/IntegerArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/LongArrayField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/ShortArrayField.java
+
+Made sure that publishers are re-added by existing subscribers if they are re-created:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/topic/DefaultSubscriber.java
+
+To avoid lengthy DNS lookups in some network configurations, changed the following file:
+   rosjava_core/rosjava/src/main/java/org/ros/address/InetAddressFactory.java
+
+Fixed a bug in the serialization and deserialization of fixed-size message arrays.
+The following files are affected:
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/ListField.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/MessageFieldType.java
+   rosjava_bootstrap/message_generation/src/main/java/org/ros/internal/message/field/PrimitiveFieldType.java
+
+Added an interface to node objects, so the user can determine if simulation or wall clock time is used.
+The following files are affected:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/DefaultNode.java
+   rosjava_core/rosjava/src/main/java/org/ros/node/ConnectedNode.java
+
+Adjusted the ParameterTree implementation, so it handles parameter names that are invalid
+ROS graph names correctly. Affected files:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/client/ParameterClient.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/parameter/DefaultParameterTree.java
+   rosjava_core/rosjava/src/main/java/org/ros/namespace/GraphName.java
+   rosjava_core/rosjava/src/main/java/org/ros/node/AnonymousParmeterTree.java
+   rosjava_core/rosjava/src/main/java/org/ros/node/parameter/ParameterTree.java
+
+Enabled the TCP_NODELAY option for all TCP/IP connections to alleviate performance
+problems on Windows machines. See the affected files:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/ServiceDeclaration.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/topic/TopicDeclaration.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/transport/tcp/TcpClient.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/transport/tcp/TcpRosServer.java
+
+Ensured error-free shutdown behavior for the DefaultNode and made the shutdown timeouts
+for publisher, subscriber, service client, service server, and node public properties. See
+the affected files:
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/DefaultNode.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/DefaultServiceClient.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/service/DefaultServiceServer.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/topic/DefaultPublisher.java
+   rosjava_core/rosjava/src/main/java/org/ros/internal/node/topic/DefaultSubscriber.java
+
